@@ -23,6 +23,11 @@ public class BinaryController {
 		model.addAttribute("operand1", operand1);
 		model.addAttribute("operator", operator);
 		model.addAttribute("operand2", operand2);
+
+		if (!operand1.matches("[01]+") || !operand2.matches("[01]+")) {
+        model.addAttribute("result", "Invalid binary input");
+        return "result";
+    }
 		Binary number1=new Binary (operand1);
 		Binary number2=new Binary (operand2);
 		switch(operator)

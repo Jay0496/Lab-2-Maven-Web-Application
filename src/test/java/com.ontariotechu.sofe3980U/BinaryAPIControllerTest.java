@@ -48,4 +48,29 @@ public class BinaryAPIControllerTest {
 			.andExpect(MockMvcResultMatchers.jsonPath("$.result").value(10001))
 			.andExpect(MockMvcResultMatchers.jsonPath("$.operator").value("add"));
     }
+
+    // Design: Question 2 - Three new test cases for the binary API service
+    
+    @Test
+    public void testMultiplicationAPI() throws Exception {
+        this.mvc.perform(get("/multiply")
+                .param("operand1", "111")
+                .param("operand2", "101"))
+            .andExpect(status().isOk())
+            .andExpect(content().string("100011")); 
+    }
+
+    @Test
+    public void testAndOperationAPI() throws Exception {
+        this.mvc.perform(get("/and").param("operand1", "111").param("operand2", "101"))
+            .andExpect(status().isOk())
+            .andExpect(content().string("101"));
+    }
+
+    @Test
+    public void testOrOperationAPI() throws Exception {
+        this.mvc.perform(get("/or").param("operand1", "111").param("operand2", "101"))
+            .andExpect(status().isOk())
+            .andExpect(content().string("111"));
+    }
 }

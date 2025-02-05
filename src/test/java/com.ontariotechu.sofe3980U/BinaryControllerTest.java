@@ -57,4 +57,160 @@ public class BinaryControllerTest {
 			.andExpect(model().attribute("operand1", "111"));
     }
 
+    // Design: Question 1 - Three new test cases for the binary web application
+
+    @Test
+    public void testInvalidBinaryInput() throws Exception {
+        this.mvc.perform(post("/").param("operand1", "abc").param("operator", "+").param("operand2", "101"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "Invalid binary input")); // Update expected result
+    }
+
+    @Test
+    public void testEmptyOperand() throws Exception {
+        this.mvc.perform(post("/").param("operand1", "").param("operator", "+").param("operand2", "101"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "Invalid binary input")); // Update expected result
+    }
+
+    @Test
+    public void testMultipleAdditions() throws Exception {
+        this.mvc.perform(post("/").param("operand1", "111").param("operator", "+").param("operand2", "111"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "1110"));
+
+        this.mvc.perform(post("/").param("operand1", "1110").param("operator", "+").param("operand2", "101"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "10011"));
+    }
+
+    // Design: Question 4 - Covering almost all possible cases for implemented operations
+
+    // Test cases for Binary Multiplication (*)
+    @Test
+    public void testBinaryMultiplication() throws Exception {
+        this.mvc.perform(post("/").param("operand1", "101").param("operator", "*").param("operand2", "11"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "1111"));
+    }
+
+    @Test
+    public void testBinaryMultiplicationWithZero() throws Exception {
+        this.mvc.perform(post("/").param("operand1", "101").param("operator", "*").param("operand2", "0"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "0"));
+    }
+
+    @Test
+    public void testBinaryMultiplicationLarge() throws Exception {
+        this.mvc.perform(post("/").param("operand1", "111").param("operator", "*").param("operand2", "101"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "100011"));
+    }
+
+    @Test
+    public void testBinaryMultiplicationInvalidOperand() throws Exception {
+        this.mvc.perform(post("/").param("operand1", "abc").param("operator", "*").param("operand2", "11"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "Invalid binary input"));
+    }
+
+    @Test
+    public void testBinaryMultiplicationEmptyOperand() throws Exception {
+        this.mvc.perform(post("/").param("operand1", "").param("operator", "*").param("operand2", "101"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "Invalid binary input"));
+    }
+
+    // Test cases for Binary AND (&)
+    @Test
+    public void testBinaryAND() throws Exception {
+        this.mvc.perform(post("/").param("operand1", "101").param("operator", "&").param("operand2", "111"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "101"));
+    }
+
+    @Test
+    public void testBinaryANDWithZero() throws Exception {
+        this.mvc.perform(post("/").param("operand1", "111").param("operator", "&").param("operand2", "000"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "0"));
+    }
+
+    @Test
+    public void testBinaryANDComplex() throws Exception {
+        this.mvc.perform(post("/").param("operand1", "1010").param("operator", "&").param("operand2", "0101"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "0"));
+    }
+
+    @Test
+    public void testBinaryANDInvalidOperand() throws Exception {
+        this.mvc.perform(post("/").param("operand1", "abc").param("operator", "&").param("operand2", "11"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "Invalid binary input"));
+    }
+
+    @Test
+    public void testBinaryANDEmptyOperand() throws Exception {
+        this.mvc.perform(post("/").param("operand1", "").param("operator", "&").param("operand2", "101"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "Invalid binary input"));
+    }
+
+    // Test cases for Binary OR (|)
+    @Test
+    public void testBinaryOR() throws Exception {
+        this.mvc.perform(post("/").param("operand1", "101").param("operator", "|").param("operand2", "111"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "111"));
+    }
+
+    @Test
+    public void testBinaryORWithZero() throws Exception {
+        this.mvc.perform(post("/").param("operand1", "101").param("operator", "|").param("operand2", "0"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "101"));
+    }
+
+    @Test
+    public void testBinaryORComplex() throws Exception {
+        this.mvc.perform(post("/").param("operand1", "1100").param("operator", "|").param("operand2", "1010"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "1110"));
+    }
+
+    @Test
+    public void testBinaryORInvalidOperand() throws Exception {
+        this.mvc.perform(post("/").param("operand1", "abc").param("operator", "|").param("operand2", "11"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "Invalid binary input"));
+    }
+
+    @Test
+    public void testBinaryOREmptyOperand() throws Exception {
+        this.mvc.perform(post("/").param("operand1", "").param("operator", "|").param("operand2", "101"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("result"))
+            .andExpect(model().attribute("result", "Invalid binary input"));
+    }
+
 }
